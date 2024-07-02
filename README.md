@@ -1,66 +1,50 @@
-## Foundry
+# What is OpenZeppelin Ethernaut?
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+OpenZeppelin Ethernaut is an educational platform that provides interactive and gamified challenges to help users learn about Ethereum smart contract security. It is developed by OpenZeppelin, a company known for its security audits, tools, and best practices in the blockchain and Ethereum ecosystem.
 
-Foundry consists of:
+OpenZeppelin Ethernaut Website: [ethernaut.openzeppelin.com](ethernaut.openzeppelin.com)
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+<br>
 
-## Documentation
+# What You're Supposed to Do?
 
-https://book.getfoundry.sh/
+in `08-Vault` Challenge, You Should Try To find a Way to Get the Password Stored Inside the `password` Variable.
 
-## Usage
+`08-Vault` Challenge Link: [https://ethernaut.openzeppelin.com/level/0xB7257D8Ba61BD1b3Fb7249DCd9330a023a5F3670](https://ethernaut.openzeppelin.com/level/0xB7257D8Ba61BD1b3Fb7249DCd9330a023a5F3670)
 
-### Build
+<br>
 
-```shell
-$ forge build
+# How did i Complete This Challenge?
+
+Any Data that is Stored in a Variable in Blockchain, it Can be Read By Everyone. So the password stored inside the `password` variable, is not Secret.
+
+in `DeployVault.s.sol`, i Put the Default Password to `Hello World`.
+
+Here's How You Can Find out what the value of `private` variable is, that it does not have `getter` function inside it's own Codebase. By the Way this Only Can Be Done off-chain.
+
+Run Local Anvil Chain:
+
+```javascript
+    anvil
 ```
 
-### Test
+Then Open Up Another Terminal Instance, And Run the Following Command the Deploy the `Vault` Contract:
 
-```shell
-$ forge test
+```javascript
+    forge script script/DeployVault.s.sol --rpc-url http://127.0.0.1:8545  --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --broadcast
 ```
 
-### Format
+then Grab the Deployed Contract Address and Run the Following Command:
 
-```shell
-$ forge fmt
+```javascript
+    cast storage <CONTRACT ADDRESS> <STORAGE SLOT>
+    cast storage 0x5FbDB2315678afecb367f032d93F642f64180aa3 1
 ```
 
-### Gas Snapshots
+Take the Output of the Command Above and then Run the Following Command To Convert the bytes32 to string, So You Can Read What the `password` value is:
 
-```shell
-$ forge snapshot
+```javascript
+    cast parse-bytes32-string 0x48656c6c6f20576f726c64000000000000000000000000000000000000000000
 ```
 
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+The Password is: `Hello World`.
